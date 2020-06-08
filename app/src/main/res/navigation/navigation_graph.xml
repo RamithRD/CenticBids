@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/auctionsListFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.ramith.ascentic.centicbids.LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"/>
+        <action
+            android:id="@+id/action_loginFragment_to_auctionsListFragment"
+            app:destination="@id/auctionsListFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.ramith.ascentic.centicbids.RegisterFragment"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_registerFragment_to_auctionsListFragment"
+            app:destination="@id/auctionsListFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/auctionsListFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/auctionsListFragment"
+        android:name="com.ramith.ascentic.centicbids.AuctionsListFragment"
+        tools:layout="@layout/fragment_auctions_list">
+        <action
+            android:id="@+id/action_auctionsListFragment_to_auctionDetailFragment"
+            app:destination="@id/auctionDetailFragment" />
+        <action
+            android:id="@+id/action_auctionsListFragment_to_loginFragment"
+            app:destination="@id/loginFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/auctionDetailFragment"
+        android:name="com.ramith.ascentic.centicbids.AuctionDetailFragment"
+        tools:layout="@layout/fragment_auction_detail" />
+</navigation>

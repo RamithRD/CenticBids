@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "224439009950",
+    "firebase_url": "https://centicbids-ede0e.firebaseio.com",
+    "project_id": "centicbids-ede0e",
+    "storage_bucket": "centicbids-ede0e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224439009950:android:5eafbeb05137f34187318f",
+        "android_client_info": {
+          "package_name": "com.ramith.ascentic.centicbids"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "224439009950-3c1r7rsefleaeqtfrhrgmgirm41ctn0d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ramith.ascentic.centicbids",
+            "certificate_hash": "656aec48a918de743d0ea3221ea23d5cc6456599"
+          }
+        },
+        {
+          "client_id": "224439009950-4g25v9qn3kp0oof0moq78dedve44a74e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgqIQnCFkz164Lpi2-f-WhesQJ_w9mmLo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "224439009950-4g25v9qn3kp0oof0moq78dedve44a74e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
