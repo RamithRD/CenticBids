@@ -148,12 +148,15 @@ class AuctionsListFragment : Fragment(R.layout.fragment_auctions_list) , Firebas
 
         Log.d("AUCTIONS_LIST", "position $position clicked")
 
-       val action : AuctionsListFragmentDirections.ActionAuctionsListFragmentToAuctionDetailFragment  = AuctionsListFragmentDirections.actionAuctionsListFragmentToAuctionDetailFragment(
-           auctionItemsList?.get(position)
-       );
+        if(firebaseUser == null){
+            showGotoLoginDialog()
+        } else {
+            val action : AuctionsListFragmentDirections.ActionAuctionsListFragmentToAuctionDetailFragment  = AuctionsListFragmentDirections.actionAuctionsListFragmentToAuctionDetailFragment(
+                auctionItemsList?.get(position)
+            );
 
-       findNavController().navigate(action)
-
+            findNavController().navigate(action)
+        }
 
     }
 

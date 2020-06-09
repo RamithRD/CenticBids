@@ -8,7 +8,10 @@ data class AuctionItem  (
 
     var auction_title : String = "",
     var auction_desc : String = "",
+    var item_img_url : String = "",
     var base_price : Float = 0.0F,
-    var latest_bid : Float = 0.0F
+    var latest_bid : Float = 0.0F,
+    var latest_bid_uid : String = "",
+    val bidding_history: List<Map<String, String>>? = null
 
 ) : Parcelable

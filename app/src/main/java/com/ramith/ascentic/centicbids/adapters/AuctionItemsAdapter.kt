@@ -28,7 +28,7 @@ class AuctionItemsAdapter(var auctionItemsList : List<AuctionItem>, var onAuctio
         holder.itemView.auctionItemListNameTxt.text = currentAuctionItem.auction_title
         holder.itemView.auctionItemListDescTxt.text = currentAuctionItem.auction_desc
 
-        holder.itemView.auctionItemListImg.load("https://firebasestorage.googleapis.com/v0/b/findndine-d07c9.appspot.com/o/Test%2F001.jpg?alt=media&token=61b0bc4b-70c9-4ac2-8df0-1701f0ba41ab"){
+        holder.itemView.auctionItemListImg.load(currentAuctionItem?.item_img_url){
             memoryCachePolicy(CachePolicy.ENABLED)
         }
 
