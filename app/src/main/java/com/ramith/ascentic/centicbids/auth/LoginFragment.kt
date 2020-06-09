@@ -1,26 +1,21 @@
-package com.ramith.ascentic.centicbids
+package com.ramith.ascentic.centicbids.auth
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_register.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
-import java.lang.Exception
+import com.ramith.ascentic.centicbids.R
+import kotlinx.android.synthetic.main.fragment_login.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class RegisterFragment : Fragment(R.layout.fragment_register) {
+class LoginFragment : Fragment(R.layout.fragment_login) {
 
     lateinit var authViewModel : AuthViewModel
 
@@ -32,27 +27,36 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         firebaseAuth = FirebaseAuth.getInstance()
         authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
 
-        backToLogin.setOnClickListener {
-            findNavController().popBackStack()
+        //firebaseAuth.signOut()
+
+        signUpTxt.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
-        registerUserBtn.setOnClickListener {
+        loginUserBtn.setOnClickListener {
+            //loginUser()
+            val email = loginEmailEdt.text.toString()
+            val password =loginPasswordEdt.text.toString()
 
-            val email = registerEmailEdt.text.toString()
-            val password = registerPasswordEdt.text.toString()
-
-            authViewModel.registerUser(email, password)
+            authViewModel.loginUserWithEmailAndPassword(email, password)
             authViewModel.authenticatedUserLiveData!!.observe(viewLifecycleOwner, Observer { authenticatedUser ->
 
-                if(authenticatedUser.isAuthenticated){
-                    Log.d("BIDS_AUTH", "user has email")
-                    findNavController().navigate(R.id.action_registerFragment_to_auctionsListFragment)
-                } else {
-                    Toast.makeText(activity, "ERROR", Toast.LENGTH_LONG).show()
-                }
+                Log.d("BIDS_AUTH", "user has email")
+
+//                    if (authenticatedUser.isNew) {
+//                        createNewUser(authenticatedUser)
+//                    } else {
+//                        goToMainActivity(authenticatedUser)
+//                    }
+
+                    if(authenticatedUser.isAuthenticated){
+                        Log.d("BIDS_AUTH", "user has email")
+                        findNavController().navigate(R.id.action_loginFragment_to_auctionsListFragment)
+                    } else {
+                        Toast.makeText(activity, "ERROR", Toast.LENGTH_LONG).show()
+                    }
 
             })
-
         }
 
     }
@@ -72,7 +76,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         })
 
+
     }
+
+
 
     override fun onStart() {
         super.onStart()

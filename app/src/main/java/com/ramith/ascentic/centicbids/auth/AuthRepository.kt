@@ -1,4 +1,4 @@
-package com.ramith.ascentic.centicbids.repository
+package com.ramith.ascentic.centicbids.auth
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -15,7 +15,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 
-class FirebaseAuthRepository {
+class AuthRepository {
 
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val firestoreDbRef = FirebaseFirestore.getInstance()

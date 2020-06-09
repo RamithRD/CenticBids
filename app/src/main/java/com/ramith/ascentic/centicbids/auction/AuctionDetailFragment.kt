@@ -1,8 +1,9 @@
-package com.ramith.ascentic.centicbids
+package com.ramith.ascentic.centicbids.auction
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import com.ramith.ascentic.centicbids.R
 
 /**
  * A simple [Fragment] subclass.

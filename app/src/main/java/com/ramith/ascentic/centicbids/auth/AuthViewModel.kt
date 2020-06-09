@@ -1,17 +1,14 @@
-package com.ramith.ascentic.centicbids
+package com.ramith.ascentic.centicbids.auth
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.google.firebase.auth.AuthCredential
-import com.google.firebase.firestore.auth.User
 import com.ramith.ascentic.centicbids.model.CenticBidsUser
-import com.ramith.ascentic.centicbids.repository.FirebaseAuthRepository
 
 
 class AuthViewModel(application: Application?) : AndroidViewModel(application!!) {
 
-    var authRepository: FirebaseAuthRepository = FirebaseAuthRepository()
+    var authRepository: AuthRepository = AuthRepository()
 
     var authenticatedUserLiveData: LiveData<CenticBidsUser>? = null
     var createdUserLiveData: LiveData<CenticBidsUser>? = null

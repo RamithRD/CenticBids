@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.ramith.ascentic.centicbids.LoginFragment"
+        android:name="com.ramith.ascentic.centicbids.auth.LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.ramith.ascentic.centicbids.RegisterFragment"
+        android:name="com.ramith.ascentic.centicbids.auth.RegisterFragment"
         tools:layout="@layout/fragment_register" >
         <action
             android:id="@+id/action_registerFragment_to_auctionsListFragment"
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/auctionsListFragment"
-        android:name="com.ramith.ascentic.centicbids.AuctionsListFragment"
+        android:name="com.ramith.ascentic.centicbids.auction.AuctionsListFragment"
         tools:layout="@layout/fragment_auctions_list">
         <action
             android:id="@+id/action_auctionsListFragment_to_auctionDetailFragment"
@@ -45,6 +45,6 @@
     </fragment>
     <fragment
         android:id="@+id/auctionDetailFragment"
-        android:name="com.ramith.ascentic.centicbids.AuctionDetailFragment"
+        android:name="com.ramith.ascentic.centicbids.auction.AuctionDetailFragment"
         tools:layout="@layout/fragment_auction_detail" />
 </navigation>
