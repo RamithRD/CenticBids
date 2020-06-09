@@ -46,5 +46,10 @@
     <fragment
         android:id="@+id/auctionDetailFragment"
         android:name="com.ramith.ascentic.centicbids.auction.AuctionDetailFragment"
-        tools:layout="@layout/fragment_auction_detail" />
+        tools:layout="@layout/fragment_auction_detail" >
+        <argument
+            android:name="auctionItem"
+            app:argType="com.ramith.ascentic.centicbids.model.AuctionItem"
+            app:nullable="true" />
+    </fragment>
 </navigation>

@@ -8,12 +8,12 @@ import coil.api.load
 import coil.request.CachePolicy
 import com.ramith.ascentic.centicbids.R
 import com.ramith.ascentic.centicbids.model.AuctionItem
-import kotlinx.android.synthetic.main.list_aution_item.view.*
+import kotlinx.android.synthetic.main.list_auction_item.view.*
 
 class AuctionItemsAdapter(var auctionItemsList : List<AuctionItem>, var onAuctionItemClickListener : OnAuctionItemClickListener) : RecyclerView.Adapter<AuctionItemsAdapter.AuctionItemsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AuctionItemsViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_aution_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_auction_item, parent, false)
         return AuctionItemsViewHolder(view, onAuctionItemClickListener)
     }
 
@@ -43,7 +43,7 @@ class AuctionItemsAdapter(var auctionItemsList : List<AuctionItem>, var onAuctio
         }
 
         init {
-            itemView.setOnClickListener(this)
+            itemView.auctionItemMoreDetailsBtn.setOnClickListener(this)
         }
 
 

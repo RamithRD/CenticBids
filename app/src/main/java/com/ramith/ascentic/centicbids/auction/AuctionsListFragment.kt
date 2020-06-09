@@ -32,6 +32,8 @@ class AuctionsListFragment : Fragment(R.layout.fragment_auctions_list) , Firebas
 
     var userMenuItem : Menu? = null
 
+    var auctionItemsList :  List<AuctionItem>? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
@@ -41,11 +43,10 @@ class AuctionsListFragment : Fragment(R.layout.fragment_auctions_list) , Firebas
         auctionViewModel.getAllAuctionItems()
         auctionViewModel.auctionItemsListMutableLiveData!!.observe(viewLifecycleOwner, Observer { auctionsList ->
 
+            auctionItemsList = auctionsList
             Log.d("AUCTIONS_LIST", auctionsList.size.toString())
 
             val auctionsAdapter = AuctionItemsAdapter(auctionsList, this)
-
-
             auctionsListRecycler.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
             auctionsListRecycler.adapter = auctionsAdapter
 
@@ -144,6 +145,15 @@ class AuctionsListFragment : Fragment(R.layout.fragment_auctions_list) , Firebas
     }
 
     override fun onAuctionItemClicked(position: Int) {
+
+        Log.d("AUCTIONS_LIST", "position $position clicked")
+
+       val action : AuctionsListFragmentDirections.ActionAuctionsListFragmentToAuctionDetailFragment  = AuctionsListFragmentDirections.actionAuctionsListFragmentToAuctionDetailFragment(
+           auctionItemsList?.get(position)
+       );
+
+       findNavController().navigate(action)
+
 
     }
 
