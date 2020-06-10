@@ -18,6 +18,7 @@ import com.ramith.ascentic.centicbids.adapters.AuctionItemsAdapter
 import com.ramith.ascentic.centicbids.model.AuctionItem
 import kotlinx.android.synthetic.main.fragment_auctions_list.*
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.indeterminateProgressDialog
 
 
 /**
@@ -40,6 +41,7 @@ class AuctionsListFragment : Fragment(R.layout.fragment_auctions_list) , Firebas
 
         auctionViewModel = ViewModelProvider(this).get(AuctionViewModel::class.java)
 
+        val progressDialog = activity?.indeterminateProgressDialog(message = "Retrieving active auctions...", title = "CenticBids")
         auctionViewModel.getAllAuctionItems()
         auctionViewModel.auctionItemsListMutableLiveData!!.observe(viewLifecycleOwner, Observer { auctionsList ->
 
@@ -49,6 +51,8 @@ class AuctionsListFragment : Fragment(R.layout.fragment_auctions_list) , Firebas
             val auctionsAdapter = AuctionItemsAdapter(auctionsList, this)
             auctionsListRecycler.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
             auctionsListRecycler.adapter = auctionsAdapter
+
+            progressDialog?.dismiss()
 
         })
 

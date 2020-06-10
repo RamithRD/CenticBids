@@ -12,6 +12,11 @@ class CBFirebaseInstanceIDService : FirebaseMessagingService(){
 
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
+
+        if(p0.notification != null){
+            Log.d("FCM_AUTO", p0.data.toString())
+        }
+
     }
 
 

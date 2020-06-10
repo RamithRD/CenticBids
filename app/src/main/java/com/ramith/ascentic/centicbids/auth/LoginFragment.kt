@@ -47,20 +47,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             authViewModel.authenticatedUserLiveData!!.observe(viewLifecycleOwner, Observer { authenticatedUser ->
 
                 progressDialog?.dismiss()
-                Log.d("BIDS_AUTH", "user has email")
 
-//                    if (authenticatedUser.isNew) {
-//                        createNewUser(authenticatedUser)
-//                    } else {
-//                        goToMainActivity(authenticatedUser)
-//                    }
-
-                    if(authenticatedUser.isAuthenticated){
-                        Log.d("BIDS_AUTH", "user has email")
-                        findNavController().navigate(R.id.action_loginFragment_to_auctionsListFragment)
-                    } else {
-                        Toast.makeText(activity, "ERROR", Toast.LENGTH_LONG).show()
-                    }
+                if(authenticatedUser.isAuthenticated){
+                    Log.d("BIDS_AUTH", "user has email")
+                    findNavController().navigate(R.id.action_loginFragment_to_auctionsListFragment)
+                } else {
+                    Toast.makeText(activity, "ERROR", Toast.LENGTH_LONG).show()
+                }
 
             })
         }
