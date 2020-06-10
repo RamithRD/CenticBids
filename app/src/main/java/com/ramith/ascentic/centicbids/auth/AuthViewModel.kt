@@ -20,9 +20,9 @@ class AuthViewModel(application: Application?) : AndroidViewModel(application!!)
 
     }
 
-    fun registerUser(email : String, password : String) {
+    fun registerUser(email : String, password : String, fcmToken : String) {
 
-        authenticatedUserLiveData = authRepository.registerUser(email, password)
+        authenticatedUserLiveData = authRepository.registerUser(email, password, fcmToken)
 
     }
 

@@ -9,8 +9,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.iid.FirebaseInstanceId
 import com.ramith.ascentic.centicbids.R
 import kotlinx.android.synthetic.main.fragment_login.*
+import org.jetbrains.anko.indeterminateProgressDialog
+import org.jetbrains.anko.progressDialog
 
 /**
  * A simple [Fragment] subclass.
@@ -27,6 +30,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         firebaseAuth = FirebaseAuth.getInstance()
         authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
 
+
         //firebaseAuth.signOut()
 
         signUpTxt.setOnClickListener {
@@ -38,9 +42,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             val email = loginEmailEdt.text.toString()
             val password =loginPasswordEdt.text.toString()
 
+            val progressDialog = activity?.indeterminateProgressDialog(message = "Signing into CenticBids...", title = "CenticBids")
             authViewModel.loginUserWithEmailAndPassword(email, password)
             authViewModel.authenticatedUserLiveData!!.observe(viewLifecycleOwner, Observer { authenticatedUser ->
 
+                progressDialog?.dismiss()
                 Log.d("BIDS_AUTH", "user has email")
 
 //                    if (authenticatedUser.isNew) {

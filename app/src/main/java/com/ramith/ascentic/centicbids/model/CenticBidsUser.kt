@@ -5,11 +5,16 @@ import java.io.Serializable
 
 class CenticBidsUser() : Serializable {
 
+    var userId: String? = null
+    var  email: String? = null
+    var  fcm_token: String? = null
+
+    @Exclude
     var isAuthenticated : Boolean = false
 
-    var userId: String? = null
+    @Exclude
+    var isCreated : Boolean = false
 
-    var  email: String? = null
 
 
 }

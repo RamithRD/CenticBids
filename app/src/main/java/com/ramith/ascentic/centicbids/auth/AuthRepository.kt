@@ -49,9 +49,7 @@ class AuthRepository {
                         authenticatedUserMutableLiveData.postValue(user)
                     }
                 }catch (e : Exception){
-                    withContext(Dispatchers.Main){
-                        //Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
-                    }
+                    Log.d("REG_ERROR", e.message)
                 }
 
             }
@@ -61,7 +59,7 @@ class AuthRepository {
         return authenticatedUserMutableLiveData
     }
 
-    fun registerUser(email : String, password : String): MutableLiveData<CenticBidsUser>? {
+    fun registerUser(email : String, password : String, fcmToken : String): MutableLiveData<CenticBidsUser>? {
 
         val registeredUserMutableLiveData = MutableLiveData<CenticBidsUser>()
 
@@ -71,7 +69,9 @@ class AuthRepository {
 
                 try{
 
-                    firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+                    val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+
+                        //val isNewUSer = result.additionalUserInfo?.isNewUser
                     val firebaseUser = firebaseAuth.currentUser
                     if(firebaseUser == null){
                         //user not logged in
@@ -85,13 +85,12 @@ class AuthRepository {
                         val user = CenticBidsUser()
                         user.userId = uid
                         user.email = email
+                        user.fcm_token = fcmToken
                         user.isAuthenticated = true
                         registeredUserMutableLiveData.postValue(user)
                     }
                 }catch (e : Exception){
-                    withContext(Dispatchers.Main){
-                        //Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
-                    }
+                    Log.d("REG_ERROR", e.message)
                 }
 
             }
@@ -106,31 +105,44 @@ class AuthRepository {
         val newUserMutableLiveData = MutableLiveData<CenticBidsUser>()
         val uidRef: DocumentReference = usersCollectionRef.document(authenticatedUser.userId!!)
 
-        uidRef.get().addOnCompleteListener { uidTask: Task<DocumentSnapshot?> ->
+        CoroutineScope(Dispatchers.IO).launch {
 
-                if (uidTask.isSuccessful) {
+            try{
 
-                    val document = uidTask.result
+                uidRef.get().addOnCompleteListener { uidTask: Task<DocumentSnapshot?> ->
 
-                    if (!document!!.exists()) {
+                    if (uidTask.isSuccessful) {
 
-                        uidRef.set(authenticatedUser).addOnCompleteListener { userCreationTask: Task<Void?> ->
+                        val document = uidTask.result
 
-                                if (userCreationTask.isSuccessful) {
-                                    newUserMutableLiveData.setValue(authenticatedUser)
-                                } else {
-                                    //logErrorMessage(userCreationTask.exception!!.message)
+                        if (!document!!.exists()) {
+
+                            uidRef.set(authenticatedUser)
+                                .addOnCompleteListener { userCreationTask: Task<Void?> ->
+
+                                    if (userCreationTask.isSuccessful) {
+                                        authenticatedUser.isCreated = true
+                                        newUserMutableLiveData.postValue(authenticatedUser)
+                                    } else {
+                                        Log.d("REG_ERROR", userCreationTask.exception!!.message)
+                                    }
                                 }
-                            }
+                        } else {
+                            newUserMutableLiveData.postValue(authenticatedUser)
+                        }
+
                     } else {
-                        newUserMutableLiveData.setValue(authenticatedUser)
+                        Log.d("REG_ERROR", uidTask.exception!!.message)
                     }
 
-                } else {
-                    //logErrorMessage(uidTask.exception!!.message)
-                }
+                }.await()
 
+            }catch (e : Exception){
+                Log.d("REG_ERROR", e.message)
             }
+
+        }
+
         return newUserMutableLiveData
     }
 
@@ -143,12 +155,12 @@ class AuthRepository {
 
         if (firebaseUser == null) {
             user.isAuthenticated = false
-            isUserAuthenticateInFirebaseMutableLiveData.postValue(user)
+            isUserAuthenticateInFirebaseMutableLiveData.setValue(user)
         } else {
             user.userId = firebaseUser.uid
             user.email = firebaseUser.email
             user.isAuthenticated = true
-            isUserAuthenticateInFirebaseMutableLiveData.postValue(user)
+            isUserAuthenticateInFirebaseMutableLiveData.setValue(user)
         }
         return isUserAuthenticateInFirebaseMutableLiveData
     }

@@ -28,6 +28,10 @@ class AuctionItemsAdapter(var auctionItemsList : List<AuctionItem>, var onAuctio
         holder.itemView.auctionItemListNameTxt.text = currentAuctionItem.auction_title
         holder.itemView.auctionItemListDescTxt.text = currentAuctionItem.auction_desc
 
+        holder.itemView.auctionItemListTimeTxt.text = "Remaining Time : 8h"
+        holder.itemView.auctionItemListBasePriceTxt.text = "Base Price : Rs.${currentAuctionItem.base_price}"
+        holder.itemView.auctionItemListHighBidTxt.text = "Highest Bid : Rs.${currentAuctionItem.latest_bid}"
+
         holder.itemView.auctionItemListImg.load(currentAuctionItem?.item_img_url){
             memoryCachePolicy(CachePolicy.ENABLED)
         }

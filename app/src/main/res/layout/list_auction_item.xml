@@ -26,29 +26,41 @@
             android:id="@+id/auctionItemListNameTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Audi"
-            android:textSize="@dimen/_14ssp"/>
+            android:textSize="@dimen/_18ssp"
+            android:textStyle="bold"
+            android:singleLine="true"/>
 
         <TextView
             android:id="@+id/auctionItemListDescTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sports 30 Automatic"
-            android:textSize="@dimen/_12ssp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="MONTHLY"
+            android:layout_marginTop="@dimen/_5sdp"
             android:textSize="@dimen/_12ssp"
-            android:layout_marginTop="@dimen/_10sdp" />
+            android:maxLines="3"
+            android:ellipsize="end"/>
 
         <TextView
-            android:id="@+id/vehicleListMonPriceTxt"
+            android:id="@+id/auctionItemListTimeTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="52,000"
-            android:textSize="@dimen/_20ssp"/>
+            android:layout_marginTop="@dimen/_10sdp"
+            android:textSize="@dimen/_13ssp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/auctionItemListHighBidTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_13ssp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/auctionItemListBasePriceTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_13ssp"
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/_10sdp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/auctionItemMoreDetailsBtn"
@@ -58,7 +70,7 @@
             android:backgroundTint="@color/primary_dark"
             android:clickable="true"
             android:padding="@dimen/_10sdp"
-            android:text="BID NOW"
+            android:text="MORE DETAILS"
             app:cornerRadius="@dimen/_5sdp"/>
 
     </LinearLayout>
