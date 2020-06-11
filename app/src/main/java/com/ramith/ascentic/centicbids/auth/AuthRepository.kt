@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.ramith.ascentic.centicbids.model.CenticBidsUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -163,6 +164,46 @@ class AuthRepository {
             isUserAuthenticateInFirebaseMutableLiveData.setValue(user)
         }
         return isUserAuthenticateInFirebaseMutableLiveData
+    }
+
+    fun updateUserFcmTokenOnLogin(userId : String, fcmToken : String) : MutableLiveData<Boolean>? {
+
+        var updatedTokenSuccessfully : Boolean = false
+
+        val auctionBidUpdateMutableLiveData = MutableLiveData<Boolean>()
+
+        CoroutineScope(Dispatchers.IO).launch {
+
+            val updateBidQuery = usersCollectionRef
+                .whereEqualTo("userId", userId)
+                .get()
+                .await()
+
+            if(updateBidQuery.documents.isNotEmpty()) {
+
+                for(document in updateBidQuery){
+
+                    try {
+
+                        usersCollectionRef.document(document.id).update("fcm_token", fcmToken).await()
+                        updatedTokenSuccessfully = true
+                        auctionBidUpdateMutableLiveData.postValue(updatedTokenSuccessfully)
+
+                    }catch (e: Exception){
+
+                        updatedTokenSuccessfully = false
+                        auctionBidUpdateMutableLiveData.postValue(updatedTokenSuccessfully)
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return auctionBidUpdateMutableLiveData
+
     }
 
 

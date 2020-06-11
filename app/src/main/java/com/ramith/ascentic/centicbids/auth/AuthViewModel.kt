@@ -13,6 +13,7 @@ class AuthViewModel(application: Application?) : AndroidViewModel(application!!)
     var authenticatedUserLiveData: LiveData<CenticBidsUser>? = null
     var createdUserLiveData: LiveData<CenticBidsUser>? = null
     var isUserAuthenticatedLiveData: LiveData<CenticBidsUser>? = null
+    var updatedFcmTokenLiveData: LiveData<Boolean>? = null
 
     fun loginUserWithEmailAndPassword(email : String, password : String) {
 
@@ -35,6 +36,12 @@ class AuthViewModel(application: Application?) : AndroidViewModel(application!!)
     fun isUserAuthenticated(){
 
         isUserAuthenticatedLiveData = authRepository.checkIfUserIsAuthenticatedInFirebase()
+
+    }
+
+    fun updateFcmTokenOnLogin(userId : String, fcmToken : String){
+
+        updatedFcmTokenLiveData = authRepository.updateUserFcmTokenOnLogin(userId, fcmToken)
 
     }
 

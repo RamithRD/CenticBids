@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.ramith.ascentic.centicbids.R
@@ -24,14 +25,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     lateinit var firebaseAuth : FirebaseAuth
 
+    var fcmToken : String = ""
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         firebaseAuth = FirebaseAuth.getInstance()
         authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
 
-
-        //firebaseAuth.signOut()
+        getFcmToken()
 
         signUpTxt.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
@@ -50,13 +52,24 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
                 if(authenticatedUser.isAuthenticated){
                     Log.d("BIDS_AUTH", "user has email")
-                    findNavController().navigate(R.id.action_loginFragment_to_auctionsListFragment)
+                    updateFcmTokenOnLogin(authenticatedUser.userId.toString())
                 } else {
                     Toast.makeText(activity, "ERROR", Toast.LENGTH_LONG).show()
                 }
 
             })
         }
+
+    }
+
+    private fun updateFcmTokenOnLogin(userId : String){
+
+        authViewModel.updateFcmTokenOnLogin(userId, fcmToken)
+        authViewModel.updatedFcmTokenLiveData!!.observe(viewLifecycleOwner, Observer {
+
+            findNavController().navigate(R.id.action_loginFragment_to_auctionsListFragment)
+
+        })
 
     }
 
@@ -75,6 +88,23 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         })
 
+
+    }
+
+    private fun getFcmToken() {
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(OnCompleteListener  { fcmTask ->
+
+            if (!fcmTask.isSuccessful) {
+                Log.d("REG_USER", "getInstanceId failed", fcmTask.exception)
+                return@OnCompleteListener
+            }
+
+            fcmToken = fcmTask.result?.token.toString()
+            Log.d("REG_USER", fcmToken, fcmTask.exception)
+
+
+        })
 
     }
 
