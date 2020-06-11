@@ -1,12 +1,11 @@
 package com.ramith.ascentic.centicbids.auth
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import com.ramith.ascentic.centicbids.model.CenticBidsUser
 
 
-class AuthViewModel(application: Application?) : AndroidViewModel(application!!) {
+class AuthViewModel() : ViewModel() {
 
     var authRepository: AuthRepository = AuthRepository()
 

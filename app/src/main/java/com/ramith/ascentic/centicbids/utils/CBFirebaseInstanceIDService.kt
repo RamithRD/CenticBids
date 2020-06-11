@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
+//Initializing the FirebaseMessagingService to receive FCM push messages
 class CBFirebaseInstanceIDService : FirebaseMessagingService(){
 
     override fun onNewToken(p0: String) {

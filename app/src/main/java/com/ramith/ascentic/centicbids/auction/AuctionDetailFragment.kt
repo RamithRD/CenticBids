@@ -117,6 +117,12 @@ class AuctionDetailFragment : Fragment(R.layout.fragment_auction_detail) {
         currentHighBidTxt.text = auctionItem?.latest_bid.toString()
         itemBasePriceTxt.text = auctionItem?.base_price.toString()
 
+        if(auctionItem!!.latest_bid_uid == FirebaseAuth.getInstance().currentUser?.uid){
+            currentStatusDescTxt.text = "You're currently the highest bidder! Yay!"
+        } else {
+            currentStatusDescTxt.text = "Place a bid to make this item yours!"
+        }
+
         auctionItemDetailsImg.load(auctionItem?.item_img_url){
             memoryCachePolicy(CachePolicy.ENABLED)
         }

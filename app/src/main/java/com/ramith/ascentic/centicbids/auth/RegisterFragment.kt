@@ -15,6 +15,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.iid.InstanceIdResult
 import com.ramith.ascentic.centicbids.R
 import com.ramith.ascentic.centicbids.model.CenticBidsUser
+import com.ramith.ascentic.centicbids.utils.EmailAddressValidator
 import kotlinx.android.synthetic.main.fragment_register.*
 import org.jetbrains.anko.indeterminateProgressDialog
 
@@ -29,11 +30,15 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     var fcmToken : String = ""
 
+    lateinit var emailFormatValidator : EmailAddressValidator
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         firebaseAuth = FirebaseAuth.getInstance()
         authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
+        emailFormatValidator = EmailAddressValidator()
+        registerEmailEdt.addTextChangedListener(emailFormatValidator)
 
         getFcmToken()
 
@@ -43,18 +48,34 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         registerUserBtn.setOnClickListener {
 
+            if (!emailFormatValidator.isValid()) {
+                registerEmailEdt.error = "Invalid email address"
+                return@setOnClickListener;
+            }
+
             val email = registerEmailEdt.text.toString()
             val password = registerPasswordEdt.text.toString()
 
+            if (password.isEmpty()) {
+                registerPasswordEdt.error = "Password cannot be empty"
+                return@setOnClickListener;
+            }
+
+            if (password.length < 6) {
+                registerPasswordEdt.error = "Password cannot be less than 6 characters"
+                return@setOnClickListener;
+            }
+
             val progressDialog = activity?.indeterminateProgressDialog(message = "Signing up with CenticBids...", title = "CenticBids")
+
             authViewModel.registerUser(email, password, fcmToken)
             authViewModel.authenticatedUserLiveData!!.observe(viewLifecycleOwner, Observer { authenticatedUser ->
 
-                progressDialog?.dismiss()
 
                 if(authenticatedUser.isAuthenticated){
                     Log.d("BIDS_AUTH", "user has email")
                     createUserRecordInFirestore(authenticatedUser)
+                    progressDialog?.dismiss()
 
                 } else {
                     Toast.makeText(activity, "ERROR", Toast.LENGTH_LONG).show()
@@ -104,7 +125,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 Toast.makeText(activity, "USER LOGGED IN", Toast.LENGTH_LONG).show()
                 findNavController().navigate(R.id.action_loginFragment_to_auctionsListFragment)
             } else {
-                Toast.makeText(activity, "ERROR", Toast.LENGTH_LONG).show()
+
             }
 
         })

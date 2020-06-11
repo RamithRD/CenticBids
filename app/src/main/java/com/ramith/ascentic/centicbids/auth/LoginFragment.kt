@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 import com.ramith.ascentic.centicbids.R
+import com.ramith.ascentic.centicbids.utils.EmailAddressValidator
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.jetbrains.anko.indeterminateProgressDialog
 import org.jetbrains.anko.progressDialog
@@ -27,11 +28,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     var fcmToken : String = ""
 
+    lateinit var emailFormatValidator : EmailAddressValidator
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         firebaseAuth = FirebaseAuth.getInstance()
         authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
+        emailFormatValidator = EmailAddressValidator()
+        loginEmailEdt.addTextChangedListener(emailFormatValidator)
 
         getFcmToken()
 
@@ -40,19 +45,33 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         loginUserBtn.setOnClickListener {
-            //loginUser()
+
+            if (!emailFormatValidator.isValid()) {
+                loginEmailEdt.error = "Invalid email address"
+                return@setOnClickListener;
+            }
+
             val email = loginEmailEdt.text.toString()
-            val password =loginPasswordEdt.text.toString()
+            val password = loginPasswordEdt.text.toString()
+
+            if (password.isEmpty()) {
+                loginPasswordEdt.error = "Password cannot be empty"
+                return@setOnClickListener;
+            }
+
+            if (password.length < 6) {
+                loginPasswordEdt.error = "Password cannot be less than 6 characters"
+                return@setOnClickListener;
+            }
 
             val progressDialog = activity?.indeterminateProgressDialog(message = "Signing into CenticBids...", title = "CenticBids")
             authViewModel.loginUserWithEmailAndPassword(email, password)
             authViewModel.authenticatedUserLiveData!!.observe(viewLifecycleOwner, Observer { authenticatedUser ->
 
-                progressDialog?.dismiss()
-
                 if(authenticatedUser.isAuthenticated){
                     Log.d("BIDS_AUTH", "user has email")
                     updateFcmTokenOnLogin(authenticatedUser.userId.toString())
+                    progressDialog?.dismiss()
                 } else {
                     Toast.makeText(activity, "ERROR", Toast.LENGTH_LONG).show()
                 }
@@ -83,7 +102,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 Toast.makeText(activity, "USER LOGGED IN", Toast.LENGTH_LONG).show()
                 findNavController().navigate(R.id.action_loginFragment_to_auctionsListFragment)
             } else {
-                Toast.makeText(activity, "ERROR", Toast.LENGTH_LONG).show()
+
             }
 
         })

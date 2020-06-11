@@ -157,8 +157,7 @@ class AuctionsListFragment : Fragment(R.layout.fragment_auctions_list) , Firebas
         } else {
             val action : AuctionsListFragmentDirections.ActionAuctionsListFragmentToAuctionDetailFragment  = AuctionsListFragmentDirections.actionAuctionsListFragmentToAuctionDetailFragment(
                 auctionItemsList?.get(position)
-            );
-
+            )
             findNavController().navigate(action)
         }
 
