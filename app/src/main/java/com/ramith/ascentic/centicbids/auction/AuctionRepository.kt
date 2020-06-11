@@ -69,9 +69,10 @@ class AuctionRepository {
 
                     try {
 
-                        auctionsCollectionRef.document(document.id).update("latest_bid_uid", auctionItem.latest_bid_uid).await()
-                        auctionsCollectionRef.document(document.id).update("latest_bid", auctionItem.latest_bid).await()
-                        auctionsCollectionRef.document(document.id).update("bidding_history", auctionItem.bidding_history).await()
+                        auctionsCollectionRef.document(document.id).set(
+                            auctionItem,
+                            SetOptions.merge()
+                        ).await()
 
                         updatedSuccessfully = true
 
