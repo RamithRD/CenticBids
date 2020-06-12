@@ -70,7 +70,7 @@
             android:backgroundTint="@color/primary_dark"
             android:clickable="true"
             android:padding="@dimen/_10sdp"
-            android:text="MORE DETAILS"
+            android:text="BID NOW"
             app:cornerRadius="@dimen/_5sdp"/>
 
     </LinearLayout>
