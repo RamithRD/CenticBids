@@ -36,7 +36,7 @@ The application consists of 4 fragments :
 3. Login fragment
 4. Register fragment
 
-![alt text](doc_assets/navigation_graph.png "CenticBids Top-level Navigation Graph")
+![alt text](doc_assets/nav_graph.png "CenticBids Top-level Navigation Graph")
 
 
 
@@ -50,7 +50,7 @@ The application uses two collections :
    3. FCM Token (used for push messages)
    4. Two flags (authenticated & created)
 
-![alt text](doc_assets/registered_user_doc.png "registered_users collection structure")
+![alt text](doc_assets/regsitered_uses_doc.png"registered_users collection structure")
 
 
 - __auction_items__ collection stores the following attributes :
@@ -78,7 +78,7 @@ GIT Repo URL => https://github.com/RamithRD/CenticBids_CloudFunction
 
 The cloud function is deployed to Firebase successfully.
 
-![alt text](doc_assets/cloud_function_dashboard.png "Cloud Function Trigger for Firestore")
+![alt text](doc_assets/cloud_function.png "Cloud Function Trigger for Firestore")
 
 
 ## App Screenshots :
