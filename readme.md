@@ -50,7 +50,7 @@ The application uses two collections :
    3. FCM Token (used for push messages)
    4. Two flags (authenticated & created)
 
-![alt text](doc_assets/regsitered_uses_doc.png"registered_users collection structure")
+![alt text](doc_assets/regsitered_uses_doc.png "registered_users collection structure")
 
 
 - __auction_items__ collection stores the following attributes :
