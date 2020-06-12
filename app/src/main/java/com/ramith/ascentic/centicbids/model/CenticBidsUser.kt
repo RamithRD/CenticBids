@@ -15,6 +15,9 @@ class CenticBidsUser() : Serializable {
     @Exclude
     var isCreated : Boolean = false
 
+    @Exclude
+    var statusMsg : String? = null
+
 
 
 }

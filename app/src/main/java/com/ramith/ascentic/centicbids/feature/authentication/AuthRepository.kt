@@ -1,4 +1,4 @@
-package com.ramith.ascentic.centicbids.auth
+package com.ramith.ascentic.centicbids.feature.authentication
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -7,13 +7,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
 import com.ramith.ascentic.centicbids.model.CenticBidsUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 
 class AuthRepository {
@@ -22,6 +20,7 @@ class AuthRepository {
     private val firestoreDbRef = FirebaseFirestore.getInstance()
     private val usersCollectionRef = firestoreDbRef.collection("registered_users")
 
+    //signin a user
     fun loginUser(email : String, password : String): MutableLiveData<CenticBidsUser>? {
 
         val authenticatedUserMutableLiveData = MutableLiveData<CenticBidsUser>()
@@ -37,6 +36,9 @@ class AuthRepository {
                     if(firebaseUser == null){
                         //user not logged in
                         Log.d("BIDS_AUTH", "user NOT logged in")
+                        val user = CenticBidsUser()
+                        user.isAuthenticated = false
+                        authenticatedUserMutableLiveData.postValue(user)
                     }else {
                         //user is logged in
                         Log.d("BIDS_AUTH", "user is logged in")
@@ -51,6 +53,10 @@ class AuthRepository {
                     }
                 }catch (e : Exception){
                     Log.d("REG_ERROR", e.message)
+                    val user = CenticBidsUser()
+                    user.statusMsg = e.message
+                    user.isAuthenticated = false
+                    authenticatedUserMutableLiveData.postValue(user)
                 }
 
             }
@@ -60,6 +66,7 @@ class AuthRepository {
         return authenticatedUserMutableLiveData
     }
 
+    //signup a user
     fun registerUser(email : String, password : String, fcmToken : String): MutableLiveData<CenticBidsUser>? {
 
         val registeredUserMutableLiveData = MutableLiveData<CenticBidsUser>()
@@ -77,6 +84,9 @@ class AuthRepository {
                     if(firebaseUser == null){
                         //user not logged in
                         Log.d("BIDS_AUTH", "user NOT registered")
+                        val user = CenticBidsUser()
+                        user.isAuthenticated = false
+                        registeredUserMutableLiveData.postValue(user)
                     }else {
                         //user is logged in
                         Log.d("BIDS_AUTH", "user is registered")
@@ -92,6 +102,10 @@ class AuthRepository {
                     }
                 }catch (e : Exception){
                     Log.d("REG_ERROR", e.message)
+                    val user = CenticBidsUser()
+                    user.statusMsg = e.message
+                    user.isAuthenticated = false
+                    registeredUserMutableLiveData.postValue(user)
                 }
 
             }
@@ -101,6 +115,7 @@ class AuthRepository {
         return registeredUserMutableLiveData
     }
 
+    //create a user record in Firestore to store fcm token and other user details
     fun createUserInFirestoreIfNotExists(authenticatedUser: CenticBidsUser): MutableLiveData<CenticBidsUser>? {
 
         val newUserMutableLiveData = MutableLiveData<CenticBidsUser>()
@@ -166,6 +181,7 @@ class AuthRepository {
         return isUserAuthenticateInFirebaseMutableLiveData
     }
 
+    //update the users fcm token on each sign in, so that the users fcm token is always upto date  even if logged in from a different device
     fun updateUserFcmTokenOnLogin(userId : String, fcmToken : String) : MutableLiveData<Boolean>? {
 
         var updatedTokenSuccessfully : Boolean = false

@@ -1,4 +1,4 @@
-package com.ramith.ascentic.centicbids.auth
+package com.ramith.ascentic.centicbids.feature.authentication
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -7,7 +7,8 @@ import com.ramith.ascentic.centicbids.model.CenticBidsUser
 
 class AuthViewModel() : ViewModel() {
 
-    var authRepository: AuthRepository = AuthRepository()
+    var authRepository: AuthRepository =
+        AuthRepository()
 
     var authenticatedUserLiveData: LiveData<CenticBidsUser>? = null
     var createdUserLiveData: LiveData<CenticBidsUser>? = null

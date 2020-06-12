@@ -1,8 +1,10 @@
-package com.ramith.ascentic.centicbids.auth
+package com.ramith.ascentic.centicbids.feature.authentication
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,10 +17,9 @@ import com.ramith.ascentic.centicbids.R
 import com.ramith.ascentic.centicbids.utils.EmailAddressValidator
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.jetbrains.anko.indeterminateProgressDialog
-import org.jetbrains.anko.progressDialog
 
 /**
- * A simple [Fragment] subclass.
+ * Login fragment is responsible for authenticating an already registererd user with Firebase
  */
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
@@ -64,6 +65,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 return@setOnClickListener;
             }
 
+            //signing in user
             val progressDialog = activity?.indeterminateProgressDialog(message = "Signing into CenticBids...", title = "CenticBids")
             authViewModel.loginUserWithEmailAndPassword(email, password)
             authViewModel.authenticatedUserLiveData!!.observe(viewLifecycleOwner, Observer { authenticatedUser ->
@@ -73,7 +75,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     updateFcmTokenOnLogin(authenticatedUser.userId.toString())
                     progressDialog?.dismiss()
                 } else {
-                    Toast.makeText(activity, "ERROR", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, authenticatedUser.statusMsg, Toast.LENGTH_LONG).show()
+                    progressDialog?.dismiss()
                 }
 
             })
@@ -81,7 +84,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     }
 
+    //updates the users fcm token field in db so the user can receive outbid notifications
     private fun updateFcmTokenOnLogin(userId : String){
+
+        //hiding keyboard if it has focus
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().getWindowToken(), 0)
 
         authViewModel.updateFcmTokenOnLogin(userId, fcmToken)
         authViewModel.updatedFcmTokenLiveData!!.observe(viewLifecycleOwner, Observer {
@@ -110,6 +118,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     }
 
+    //gets the fcm token of the current device
     private fun getFcmToken() {
 
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(OnCompleteListener  { fcmTask ->

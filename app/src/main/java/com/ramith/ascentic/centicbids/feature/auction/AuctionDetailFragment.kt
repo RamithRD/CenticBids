@@ -1,4 +1,4 @@
-package com.ramith.ascentic.centicbids.auction
+package com.ramith.ascentic.centicbids.feature.auction
 
 import android.os.Bundle
 import android.util.Log
@@ -14,12 +14,10 @@ import com.ramith.ascentic.centicbids.R
 import com.ramith.ascentic.centicbids.model.AuctionItem
 import kotlinx.android.synthetic.main.fragment_auction_detail.*
 import org.jetbrains.anko.indeterminateProgressDialog
-import java.time.Instant
-import java.time.format.DateTimeFormatter
-import kotlin.math.roundToInt
 
 /**
- * A simple [Fragment] subclass.
+ * Auctions detail fragment is responsible for showing details of a specific auction item
+ * and authenticated users are able to bid on them
  */
 class AuctionDetailFragment : Fragment(R.layout.fragment_auction_detail) {
 
@@ -32,19 +30,21 @@ class AuctionDetailFragment : Fragment(R.layout.fragment_auction_detail) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val args : AuctionDetailFragmentArgs = AuctionDetailFragmentArgs.fromBundle(requireArguments())
+        //retrieve the auction item object from AuctionListFragment via safe args
+        val args : AuctionDetailFragmentArgs =
+            AuctionDetailFragmentArgs.fromBundle(
+                requireArguments()
+            )
         auctionItem = args.auctionItem
 
         auctionViewModel = ViewModelProvider(this).get(AuctionViewModel::class.java)
-
-        Log.d("SAFE_ARGS", auctionItem!!.bidding_history.toString())
-        Log.d("AUCTION", "Bidding history " +auctionItem!!.bidding_history.toString())
 
         initUI()
         setupBiddingMechanism()
 
     }
 
+    //users cannot bid a lower amount than the current highest bid
     private fun setupBiddingMechanism(){
 
         newBidValue = getCurrentBidValue().toInt()

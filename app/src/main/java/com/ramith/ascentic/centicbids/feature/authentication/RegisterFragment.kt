@@ -1,18 +1,18 @@
-package com.ramith.ascentic.centicbids.auth
+package com.ramith.ascentic.centicbids.feature.authentication
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.iid.InstanceIdResult
 import com.ramith.ascentic.centicbids.R
 import com.ramith.ascentic.centicbids.model.CenticBidsUser
 import com.ramith.ascentic.centicbids.utils.EmailAddressValidator
@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.fragment_register.*
 import org.jetbrains.anko.indeterminateProgressDialog
 
 /**
- * A simple [Fragment] subclass.
+ * Register fragment is responsible for registering a new user with Firebase - using Email/Password method
  */
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
@@ -68,6 +68,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
             val progressDialog = activity?.indeterminateProgressDialog(message = "Signing up with CenticBids...", title = "CenticBids")
 
+            //if all validations are passed, go ahead with registration
             authViewModel.registerUser(email, password, fcmToken)
             authViewModel.authenticatedUserLiveData!!.observe(viewLifecycleOwner, Observer { authenticatedUser ->
 
@@ -88,6 +89,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun createUserRecordInFirestore(user : CenticBidsUser){
+
+        //hiding keyboard if it has focus
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().getWindowToken(), 0)
 
         authViewModel.createUser(user)
         authViewModel.createdUserLiveData!!.observe(viewLifecycleOwner, Observer {

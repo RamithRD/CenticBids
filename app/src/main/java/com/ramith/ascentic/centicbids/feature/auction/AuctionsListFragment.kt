@@ -1,4 +1,4 @@
-package com.ramith.ascentic.centicbids.auction
+package com.ramith.ascentic.centicbids.feature.auction
 
 import android.os.Bundle
 import android.util.Log
@@ -22,7 +22,8 @@ import org.jetbrains.anko.indeterminateProgressDialog
 
 
 /**
- * A simple [Fragment] subclass.
+ * Auctions List fragment is responsible for listing down all active auctions and it's details,
+ * User can view more details or bid an item by clicking the more details button
  */
 class AuctionsListFragment : Fragment(R.layout.fragment_auctions_list) , FirebaseAuth.AuthStateListener, AuctionItemsAdapter.OnAuctionItemClickListener {
 
@@ -42,6 +43,8 @@ class AuctionsListFragment : Fragment(R.layout.fragment_auctions_list) , Firebas
         auctionViewModel = ViewModelProvider(this).get(AuctionViewModel::class.java)
 
         val progressDialog = activity?.indeterminateProgressDialog(message = "Retrieving active auctions...", title = "CenticBids")
+
+        //retrieving all the active auctions as a list
         auctionViewModel.getAllAuctionItems()
         auctionViewModel.auctionItemsListMutableLiveData!!.observe(viewLifecycleOwner, Observer { auctionsList ->
 
@@ -59,6 +62,7 @@ class AuctionsListFragment : Fragment(R.layout.fragment_auctions_list) , Firebas
 
     }
 
+    //listens to the user's auth status and hide/show the logout action menu
     override fun onAuthStateChanged(firebaseAuth : FirebaseAuth) {
 
         firebaseUser = firebaseAuth.currentUser
@@ -72,6 +76,7 @@ class AuctionsListFragment : Fragment(R.layout.fragment_auctions_list) , Firebas
         }
     }
 
+    //inflates the menu determining the user's auth status
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.logout_menu, menu)
@@ -114,6 +119,7 @@ class AuctionsListFragment : Fragment(R.layout.fragment_auctions_list) , Firebas
         }
     }
 
+    //signout from firebase
     private fun singOutFirebase() {
         firebaseAuth.signOut()
     }
@@ -148,6 +154,7 @@ class AuctionsListFragment : Fragment(R.layout.fragment_auctions_list) , Firebas
 
     }
 
+    //handles the on item click for each item, goes to the details fragment
     override fun onAuctionItemClicked(position: Int) {
 
         Log.d("AUCTIONS_LIST", "position $position clicked")
@@ -155,9 +162,10 @@ class AuctionsListFragment : Fragment(R.layout.fragment_auctions_list) , Firebas
         if(firebaseUser == null){
             showGotoLoginDialog()
         } else {
-            val action : AuctionsListFragmentDirections.ActionAuctionsListFragmentToAuctionDetailFragment  = AuctionsListFragmentDirections.actionAuctionsListFragmentToAuctionDetailFragment(
-                auctionItemsList?.get(position)
-            )
+            val action : AuctionsListFragmentDirections.ActionAuctionsListFragmentToAuctionDetailFragment =
+                AuctionsListFragmentDirections.actionAuctionsListFragmentToAuctionDetailFragment(
+                    auctionItemsList?.get(position)
+                )
             findNavController().navigate(action)
         }
 

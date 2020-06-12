@@ -1,4 +1,4 @@
-package com.ramith.ascentic.centicbids.auction
+package com.ramith.ascentic.centicbids.feature.auction
 
 import android.util.Log
 import android.widget.Toast
@@ -19,6 +19,7 @@ class AuctionRepository {
     private val firestoreDbRef = FirebaseFirestore.getInstance()
     private val auctionsCollectionRef = firestoreDbRef.collection("auction_items")
 
+    //retrieves all the action auctions
     fun getAllAuctionItems() : MutableLiveData<List<AuctionItem>> {
 
         val auctionItemsList : MutableList<AuctionItem> = mutableListOf()
@@ -50,6 +51,8 @@ class AuctionRepository {
 
     }
 
+    //place a bid on an item, updates the auction_item_id field in firestore with the latest bid amount
+    //the cloud function will be listening to this update trigger and send notifications to all the users who have been outbid
     fun updateBidForItem(auctionItem : AuctionItem) : MutableLiveData<Boolean> {
 
         var updatedSuccessfully : Boolean = false
